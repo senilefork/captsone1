@@ -1,0 +1,30 @@
+{% extends 'index.html'%}
+{%block title%}<title>New Apartment Form</title>{% endblock %}
+{%block content%}
+<h1>Filter Apartments</h1>
+{% for msg in get_flashed_messages() %}
+  <div>{{ msg }}</div>
+{% endfor %}
+
+<div class="sidenav">
+  <form id="filter-apartment-form">
+    {{ form.hidden_tag() }} 
+  
+  {% for field in form
+           if field.widget.input_type != 'hidden' %}
+    
+      <p>
+        {{ field.label }}
+        {{ field }}
+      
+        {% for error in field.errors %}
+          {{ error }}
+        {% endfor %}
+     </p>
+    
+   {% endfor %}
+    
+   <button type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

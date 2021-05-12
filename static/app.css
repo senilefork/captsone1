@@ -1,0 +1,58 @@
+.top-nav{
+  display: flex;
+  height:15%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.sign_out{
+  margin-left: auto;
+}
+
+
+.top-nav li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.home_page_container{
+  display:flex;
+}
+
+.sidenav {
+    height: 85%;
+    width: 25%;
+    background-color: #9188a8;     
+  }
+
+.home_page_list{
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-apt{
+  display:flex;
+  justify-content: space-around;
+  background-color: aliceblue;
+  margin: 10px;
+  padding: 10px;
+  width:95%;
+  height: 50px;
+
+}
+
+.map-container{
+  display:flex;
+}
+
+.map{
+    height:400px;
+    width:75%;
+}

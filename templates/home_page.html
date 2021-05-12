@@ -1,0 +1,35 @@
+{% extends 'index.html'%}
+{%block title%}<title>Home</title>{% endblock %}
+{%block content%}
+<containter class="home_page_container">
+  <div class="sidenav">
+    <form id="home-filter-apartment-form">
+      {{ form.hidden_tag() }} 
+    
+    {% for field in form
+             if field.widget.input_type != 'hidden' %}
+      
+        <p>
+          {{ field.label }}
+          {{ field }}
+        
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+       </p>
+      
+     {% endfor %}
+     <button id="home-button" type="submit">Submit</button>
+  </form>
+  </div>
+  <div class="home_page_list">
+    
+    
+      
+  </div> 
+</containter>  
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="static/home.js"></script>
+      
+{% endblock %}
+
