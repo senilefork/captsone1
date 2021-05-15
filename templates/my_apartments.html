@@ -5,7 +5,7 @@
 <h1 >My Apartments</h1>
 
 {% for apartment in g.user.apartments%}
-<a href="/user_apartment/{{apartment.id}}"><p>{{apartment.street}}</p></a>
+<p><a class="my-links" href="/user_apartment/{{apartment.id}}"><p>{{apartment.street}}</p></a></p>
 {% endfor %}
 
 {% endblock %}

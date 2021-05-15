@@ -4,28 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/app.css">
     {% block title %}<title>Home</title>{% endblock%}
 </head>
 <body>
-    <ul class="top-nav">
-        {% if g.user%}
-        <li class="home"><a href="/">Home</a></li>
-        <li class="nav-map"><a href="/map">Map</a></li>
-        <li class="my_listings"><a href="/my_apartments">My Apartments</a></li>
-        <li class="sign_out"><a href="/sign_out">Sign Out</a></li>
-        {% else %}
-        <li class="sign_in"><a href="/login">Login</a></li>
-        <li class="register"><a href="/register">Register</a></li>
-        {% endif %}
-    </ul>
-
-    <div>
-        {% for category, message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-
+<ul class="top-nav">
+    {% if g.user.user_type == "admin" %}
+    <li class="home"><a href="/">Home</a></li>
+    <li class="nav-map"><a href="/map">Map</a></li>
+    <li class="my_listings"><a href="/my_apartments">My Apartments</a></li>
+    <li class="new_apartment"><a href="/new_apartment">New apartment</a></li>
+    <li class="sign_out"><a href="/sign_out">Sign Out</a></li>
+    {% elif g.user.user_type == "agent" %}
+    <li class="home"><a href="/">Home</a></li>
+    <li class="nav-map"><a href="/map">Map</a></li>
+    <li class="my_listings"><a href="/my_apartments">My Apartments</a></li>
+    <li class="sign_out"><a href="/sign_out">Sign Out</a></li>       
+    {% else  %}
+    <li class="sign_in"><a href="/login">Login</a></li>
+    <li class="register"><a href="/register">Register</a></li>
+    {% endif %}
+</ul>
+<div>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+</div>
+<div id="rest-of-page-div">
     {%block content%}
-    {% endblock %}   
+    {% endblock %} 
+</div>  
 </body>
 </html>

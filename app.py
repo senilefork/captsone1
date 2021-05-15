@@ -1,11 +1,12 @@
-from flask import Flask, redirect, render_template, redirect, flash, session, jsonify, request, g
+from flask import Flask, redirect, render_template, redirect, flash, session, jsonify, request, g, url_for, send_from_directory, abort
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Management, Apartment, User, UserApartment
+from models import db, connect_db, Management, Apartment, User, UserApartment,UserApartmentPhoto
 from forms import AddAddressForm, FilterApartmentsForm, RegisterForm, LoginForm, AddApartmentForm
 from info import API_KEY
-import requests, json, pdb
+import requests, json, pdb, os
+from werkzeug.utils import secure_filename
 
 CURRENT_USER = "current_user"
 
@@ -13,15 +14,14 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///real-estate-db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'uploads'
 
 connect_db(app)
 #db.create_all()
 
 app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
 
-# Having the Debug Toolbar show redirects explicitly is often useful;
-# however, if you want to turn it off, you can uncomment this line:
-#
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
@@ -52,6 +52,8 @@ def logout():
 
 ####################################################
 # apartment coords and json related functions
+
+#get_coords is used in the /new_apartment route to take the input address and get coordiantes from the mapquest api
 def get_coords(address):
     res = requests.get("http://www.mapquestapi.com/geocoding/v1/address", params={'key': API_KEY, 'location': address})
 
@@ -61,6 +63,7 @@ def get_coords(address):
     coords = {'lat' : lat, 'lng': lng}
     return coords
 
+#serialize apartment info to prepare for json
 def serialize_apartments(apartment, name):
 
     serialized = {
@@ -80,10 +83,13 @@ def serialize_apartments(apartment, name):
             'rooftop_access' : apartment.rooftop_access,
             'access' : apartment.access,
             'neighborhood' : apartment.neighborhood,
+            'availability' : apartment.availability,
             'notes' : apartment.notes,
             'coordinates' : apartment.coordinates
     }
     return serialized
+######################################
+# register and login routes
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
@@ -266,6 +272,9 @@ def filter_apartments():
         if request.args.get("neighborhood"):
             neighborhood = request.args["neighborhood"]
             apartments = apartments.filter_by(neighborhood=neighborhood)
+        if request.args.get("availability"):
+            availability = request.args["availability"]
+            apartments = apartments.filter_by(availability=availability)
         apartments =  [serialize_apartments(apartment, apartment.management_company.company_name ) for apartment in apartments]
         return jsonify(apartments=apartments)
     
@@ -303,6 +312,15 @@ def edit_apartments(id):
     else:
         return render_template('edit_apartment.html', form=form)   
 
+@app.route('/delete/<int:id>')
+def delete(id):
+
+    apartment = Apartment.query.get_or_404(id)
+    db.session.delete(apartment)
+    db.session.commit()
+    return redirect('/')
+
+
 @app.route('/detail/<int:id>', methods=["GET", "POST"])
 def detail(id):
     """apartment detail"""
@@ -326,8 +344,6 @@ def detail(id):
 
     return render_template('detail.html', apartment=apartment, form=form)
 
-
-
 @app.route('/my_apartments')
 def my_apartments():
     if not g.user:
@@ -344,10 +360,46 @@ def user_apartment(id):
         return redirect('/register')
 
     apartment = Apartment.query.get_or_404(id)
-    return render_template('user_apartment_detail.html', apartment=apartment)
+    user_apartment_id = UserApartment.query
+    user_apartment_id = user_apartment_id.filter(UserApartment.user_id== g.user.id, UserApartment.apartment_id==id)
+
+    apartment_photos = UserApartmentPhoto.query.filter_by(user_apartment_id=id)
+    files = [photo.name for photo in apartment_photos]
+
+    return render_template('user_apartment_detail.html', apartment=apartment, user_apartment_id=user_apartment_id[0], files=files)
 
 
 
+@app.route('/upload_photo/<int:id>', methods=["GET","POST"])
+def upload(id):
+    if not g.user:
+        flash("Unauthorized access, please login or register")
+        return redirect('/register')
+
+    user_apartment_id = id 
+    if request.method == 'POST':
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+                abort(400)
+            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+            #########add to db here
+            new_photo = UserApartmentPhoto(user_apartment_id=user_apartment_id, name=filename)
+            db.session.add(new_photo)
+            db.session.commit()
+        return redirect(url_for('upload', id=user_apartment_id))
+    return render_template('add_photo.html')
+
+@app.route('/get_uploads/<filename>')
+def get_upload(filename):
+    if not g.user:
+        flash("Unauthorized access, please login or register")
+    return send_from_directory(app.config['UPLOAD_PATH'], filename)
+
+#########################################################
+# map route
 @app.route('/map')
 def map():
     """Map route"""

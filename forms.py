@@ -4,7 +4,7 @@ from wtforms.fields.simple import SubmitField
 from wtforms.validators import InputRequired, Email, Length
 
 
-cities = ['Brooklyn', 'New York', 'Queens', 'Bronx', 'Staten Island']
+cities = ['','Brooklyn', 'New York', 'Queens', 'Bronx', 'Staten Island']
 
 
 class AddAddressForm(FlaskForm):
@@ -40,7 +40,7 @@ class FilterApartmentsForm(FlaskForm):
     balcony = RadioField(choices=[('True', 'balcony')])
     rooftop_access = RadioField(choices=[('True', 'Rooftop access')])
     neighborhood = StringField("Neighborhood")
-    availability = SelectField("Availability", choices=[('occupied','occupied'),('vacant','vacant'), ('deposit', 'deposit')])
+    availability = SelectField("Availability", choices=[("",""),('occupied','occupied'),('vacant','vacant'), ('deposit', 'deposit')])
 
 
     

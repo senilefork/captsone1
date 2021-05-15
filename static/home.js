@@ -1,10 +1,13 @@
 let apartmentsArray = []
+
+//when home page loads get apartments info from api and pass data to addApartmentsToPage
 window.onload = async function(){
     apartmentsArray = await getHomepageApartments()
     addApartmentsToPage(apartmentsArray)
     apartmentsArray = []
   }
-  
+
+  //get apartments json from api and return it in an array
   async function getHomepageApartments(){
     let res = await axios.get('http://127.0.0.1:5000/get_apartments_json')
     let apartments = res.data.apartments
@@ -14,12 +17,13 @@ window.onload = async function(){
     return apartmentsArray
   }
 
+  //collect form data for filtering
   let homeForm = document.getElementById('home-filter-apartment-form')
   homeForm.addEventListener("submit", async function getFilteredApartments(e){
     e.preventDefault()
-    console.log('hi')
-    let valueArray = []
-  let keyArray = ["price", "management_id", "street", "city", "beds", "baths", "laundry", "backyard", "balcony", "rooftop_access", "neighborhood"]
+    
+  let valueArray = []
+  let keyArray = ["price", "management_id", "street", "city", "beds", "baths", "laundry", "backyard", "balcony", "rooftop_access", "neighborhood","availability"]
   let filterObject = {}
 
   let price = document.getElementById("price").value 
@@ -48,8 +52,10 @@ window.onload = async function(){
   valueArray.push(rooftop_accessValue)
   let neighborhood = document.getElementById("neighborhood").value 
   valueArray.push(neighborhood)
-  console.log(valueArray)
+  let availability = document.getElementById("availability").value 
+  valueArray.push(availability)
   
+//this logic works the same as map.js file
   for(let i = 0; i < valueArray.length; i++){
     if(valueArray[i] != "" && valueArray[i] != 0){
       let keys = keyArray[i]
@@ -57,12 +63,14 @@ window.onload = async function(){
       filterObject[keys] = values
     }
   }
-  console.log(filterObject)
+
+  //get filtered apartments json, add to array and pass array to addApartmentsToPage function
   res = await axios.get('http://127.0.0.1:5000/filter_apartments', { params: filterObject})
   apartmentsArray = res.data.apartments
   addApartmentsToPage(apartmentsArray)
   })
 
+  //this function takes an array of apartment objects and adds html with individual apartment data
   function addApartmentsToPage(arrayOfObjects){
     let homepageListDiv = document.querySelector('.home_page_list');
 
@@ -111,7 +119,7 @@ window.onload = async function(){
     }
   }
 
-
+//get value of radio field
   function getRadioValue(ul){
     for (let i = 0; i < ul.length; i++){
       if(ul[i].checked){

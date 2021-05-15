@@ -2,15 +2,14 @@
 
 {% block content %}
 
-<h1 >Sign Up</h1>
-<p>Register below to join our application!</p>
+<h1 style="text-align:center" >Sign Up</h1>
+<p style="text-align:center">Register below to join our application!</p>
 
-<form method="POST">
+<form id="register-form" method="POST">
   {{ form.hidden_tag() }}
-
   {% for field in form
     if field.widget.input_type != 'hidden' %}
-    <p>
+    <p class="input-field">
       {{ field.label }}
       {{ field(class_="form-control") }}
 

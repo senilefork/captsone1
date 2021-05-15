@@ -98,9 +98,21 @@ class UserApartment(db.Model):
     """user's listed apartments"""
 
     __tablename__ = "users_apartments"
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    apartment_id = db.Column(db.Integer, db.ForeignKey('apartments.id'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', primary_key=True))
-    apartment_id = db.Column(db.Integer, db.ForeignKey('apartments.id'), primary_key=True)
+    photos = db.relationship('UserApartmentPhoto', backref='users_apartments')
+
+class UserApartmentPhoto(db.Model):
+    """photos for a user's listed apartment"""
+
+    __tablename__ = "user_apartment_photos"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_apartment_id = db.Column(db.Integer, db.ForeignKey('users_apartments.id'))
+    name = db.Column(db.String)
 
 
 

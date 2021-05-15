@@ -1,19 +1,24 @@
 {% extends 'index.html'%}
 {%block title%}<title>{{apartment.street}} Detail</title>{% endblock %}
 {%block content%}
-<container>
-    <h2>{{apartment.street}}</h2>
-    <h3>Management:</h3><p>{{apartment.management_company.company_name}}</p>
-    <h3>Address:</h3><p>{{apartment.street}} apt# {{apartment.apartment_number}} {{apartment.city}}</p>
-    <h3>Bedrooms:</h3><p>{{apartment.beds}}</p>
-    <h3>Bathrooms:</h3><p>{{apartment.baths}}</p>
-    <h3>Price:</h3><p>{{apartment.price}}</p>
-    <h3>Outdoor Space:</h3><p>{{apartment.backyard}}</p>
-    <h3>Balcony:</h3><p>{{apartment.balcony}}</p>
-    <h3>Rooftop access</h3><p>{{apartment.rooftop_access}}</p>
-    <h3>Neighborhood:</h3><p>{{apartment.neighborhood}}</p>
-    <h3>Access:</h3><p>{{apartment.access}}</p>
-    <h3>Notes:</h3><p>{{apartment.notes}}</p>
+    <container class="detail-container">
+       <div class="details">
+        <h1>{{apartment.street}} apt# {{apartment.apartment_number}}</h1>
+        <h1>${{apartment.price}}</h1>
+        <h2>{{apartment.neighborhood}} {{apartment.city}}</h2>
+        <p>Management: {{apartment.management_company.company_name}}</p>
+        <p>Bedrooms: {{apartment.beds}} | Bathrooms: {{apartment.baths}} </p>
+        <p>Outdoor Space: {{apartment.backyard}} | Balcony: {{apartment.balcony}} | Rooftop access: {{apartment.rooftop_access}} </p>
+        <p>Access: {{apartment.access}}</p>
+        <p>Notes: {{apartment.notes}}</p>
+        <button><a class="button" href="/upload_photo/{{user_apartment_id.id}}">Upload Photos</a></button>
+        </div>
+    <br>
+        <container class="image-container">
+        {% for file in files %}
+         <img class="image" src="{{ url_for('get_upload', filename=file) }}", style="height: 400px; width: 400px;">
+        {% endfor %}
+        </container>
+    </container>
 
-</container>
 {% endblock %}
