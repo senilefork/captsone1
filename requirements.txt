@@ -1,3 +1,14 @@
+appnope==0.1.0
+astroid==2.5
+backcall==0.1.0
+bcrypt==3.1.4
+blinker==1.4
+certifi==2020.12.5
+cffi==1.14.3
+chardet==4.0.0
+Click==7.0
+colorama==0.4.4
+decorator==4.3.0
 Flask==1.0.2
 Flask-DebugToolbar==0.10.1
 Flask-SQLAlchemy==2.4.4
