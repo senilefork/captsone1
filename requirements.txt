@@ -75,7 +75,6 @@ service-identity==18.1.0
 simplegeneric==0.8.1
 simplejson==3.16.0
 six==1.11.0
-sos==4.0
 SQLAlchemy==1.3.20
 ssh-import-id==5.10
 systemd-python==234
