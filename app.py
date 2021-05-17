@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 CURRENT_USER = "current_user"
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///real-estate-db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','postgresql:///real-estate-db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
