@@ -4,7 +4,6 @@ from sqlalchemy.exc import IntegrityError
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Management, Apartment, User, UserApartment,UserApartmentPhoto
 from forms import AddAddressForm, FilterApartmentsForm, RegisterForm, LoginForm, AddApartmentForm
-from info import API_KEY
 import requests, json, pdb, os
 from werkzeug.utils import secure_filename
 
