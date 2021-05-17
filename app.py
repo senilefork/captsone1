@@ -20,7 +20,7 @@ app.config['UPLOAD_PATH'] = 'uploads'
 connect_db(app)
 #db.create_all()
 
-app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'bArt_mAnn-1999')
 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 

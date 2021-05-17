@@ -1,5 +1,4 @@
 /venv
 __pycache__/
-/info.py
 /templates/map.html
 /info.js
