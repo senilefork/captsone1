@@ -23,6 +23,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'bArt_mAnn-1999')
 
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+API_KEY = os.environ.get('API_KEY', 'none')
+
 debug = DebugToolbarExtension(app)
 
 ###########################################################################
