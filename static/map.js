@@ -12,7 +12,7 @@ window.onload = async function(){
 
 //get all apartments from our api and return them in an array with coordinates, street and price
 async function getApartments(){
-  let res = await axios.get('http://127.0.0.1:5000/get_apartments_json')
+  let res = await axios.get('https://capstone1-anna-f.herokuapp.com/get_apartments_json')
   let apartments = res.data.apartments
   for(let i = 0; i < apartments.length; i++){
     coordinatesArray.push([apartments[i]["coordinates"], apartments[i]["street"], apartments[i]["price"]])
@@ -87,7 +87,7 @@ filterForm.addEventListener("submit", async function(e){
     }
   }
 //pass our filerObject to /filter_apartments endpoint to recieve filtered apartments json
-  res = await axios.get('http://127.0.0.1:5000/filter_apartments', { params: filterObject})
+  res = await axios.get('https://capstone1-anna-f.herokuapp.com/filter_apartments', { params: filterObject})
   let filteredApartments = res.data.apartments
 
 //iterate over our filtered apartments extracting the data that we want

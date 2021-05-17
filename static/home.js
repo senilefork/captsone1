@@ -9,7 +9,7 @@ window.onload = async function(){
 
   //get apartments json from api and return it in an array
   async function getHomepageApartments(){
-    let res = await axios.get('http://127.0.0.1:5000/get_apartments_json')
+    let res = await axios.get('https://capstone1-anna-f.herokuapp.com/get_apartments_json')
     let apartments = res.data.apartments
     for(let i = 0; i < apartments.length; i++){
       apartmentsArray.push(apartments[i])
@@ -65,7 +65,7 @@ window.onload = async function(){
   }
 
   //get filtered apartments json, add to array and pass array to addApartmentsToPage function
-  res = await axios.get('http://127.0.0.1:5000/filter_apartments', { params: filterObject})
+  res = await axios.get('https://capstone1-anna-f.herokuapp.com/filter_apartments', { params: filterObject})
   apartmentsArray = res.data.apartments
   addApartmentsToPage(apartmentsArray)
   })
