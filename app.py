@@ -24,6 +24,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'bArt_mAnn-1999')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 API_KEY = os.environ.get('API_KEY', 'none')
+MAP_API = os.environ.get('MAP_API', 'none')
 
 debug = DebugToolbarExtension(app)
 
@@ -415,7 +416,7 @@ def map():
     choices.insert(0, blank_choice[0])
     form.management.choices =choices
     
-    return render_template('map.html', form=form)
+    return render_template('map.html', form=form, api=MAP_API)
 
 
     

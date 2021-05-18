@@ -1,0 +1,36 @@
+{% extends 'index.html'%}
+{%block title%}<title>Map</title>{% endblock %}
+{%block content%}
+
+<container class="map-container">
+  <div class="sidenav">
+    <form class="filter-form" id="filter-apartment-form">
+      {{ form.hidden_tag() }} 
+    
+    {% for field in form
+             if field.widget.input_type != 'hidden' %}
+      
+        <p>
+          {{ field.label }}
+          {{ field }}
+        
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+       </p>
+      
+     {% endfor %}
+      
+     <button id="filter-button" type="submit">Submit</button>
+    </form>
+  </div>
+  <div id="map" class="map">
+  </div>
+</container>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{api}}&callback=initMap&libraries=&v=weekly"
+  async
+></script>
+<script src="static/map.js"></script>
+{% endblock %}
